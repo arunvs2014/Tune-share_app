@@ -27,8 +27,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Mock authentication logic. In a real app, this would use Firebase Auth.
     const timer = setTimeout(() => {
         // To test logged out state, set the initial user to null
-        // setUser(null);
-        setUser(MOCK_USER); 
+        setUser(null);
+        // setUser(MOCK_USER); 
         setLoading(false);
     }, 1000);
 
