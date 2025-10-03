@@ -29,9 +29,9 @@ export const sampleUsers: User[] = [
   },
 ];
 
-export const samplePosts: Post[] = [
+// This data can be used to seed the database if needed.
+export const samplePosts: Omit<Post, 'id' | 'user' | 'commentCount'>[] = [
   {
-    id: 'post1',
     uid: 'user1',
     songName: 'Starlight Echo',
     artist: 'Cosmic Drift',
@@ -42,7 +42,6 @@ export const samplePosts: Post[] = [
     link: 'https://example.com/song1',
   },
   {
-    id: 'post2',
     uid: 'user2',
     songName: 'Ocean Breath',
     artist: 'Tidal Flow',
@@ -52,7 +51,6 @@ export const samplePosts: Post[] = [
     coverArt: 'https://picsum.photos/seed/song2/300/300',
   },
   {
-    id: 'post3',
     uid: 'user3',
     songName: 'Sunset Fuzz',
     artist: 'The GarageTones',
@@ -62,7 +60,6 @@ export const samplePosts: Post[] = [
     coverArt: 'https://picsum.photos/seed/song3/300/300',
   },
     {
-    id: 'post4',
     uid: 'user1',
     songName: 'Neon Dreams',
     artist: 'Synthwave Surfers',

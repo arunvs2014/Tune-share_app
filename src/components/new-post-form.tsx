@@ -1,11 +1,17 @@
 'use client';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { useAuth } from '@/hooks/use-auth';
+import { createPost } from '@/lib/firebase/firestore';
+import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
 
 const postSchema = z.object({
   songName: z.string().min(1, 'Song name is required'),
@@ -17,6 +23,11 @@ const postSchema = z.object({
 type PostFormValues = z.infer<typeof postSchema>;
 
 export default function NewPostForm() {
+  const router = useRouter();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<PostFormValues>({
     resolver: zodResolver(postSchema),
     defaultValues: {
@@ -27,10 +38,44 @@ export default function NewPostForm() {
     },
   });
 
-  function onSubmit(data: PostFormValues) {
-    // In a real app, this would save the data to Firestore.
-    console.log(data);
-    form.reset();
+  async function onSubmit(data: PostFormValues) {
+    if (!user) {
+      toast({
+        title: "Authentication Error",
+        description: "You must be logged in to create a post.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await createPost({
+        uid: user.uid,
+        songName: data.songName,
+        artist: data.artist,
+        link: data.link,
+        caption: data.caption || '',
+      });
+
+      toast({
+        title: "Success!",
+        description: "Your tune has been posted.",
+      });
+
+      form.reset();
+      router.push('/feed');
+
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -88,8 +133,15 @@ export default function NewPostForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-lg py-6">
-          Post Tune
+        <Button type="submit" disabled={isLoading} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-lg py-6">
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Posting...
+            </>
+          ) : (
+            'Post Tune'
+          )}
         </Button>
       </form>
     </Form>
