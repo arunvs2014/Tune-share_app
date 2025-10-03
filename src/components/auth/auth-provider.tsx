@@ -1,14 +1,10 @@
 "use client";
 
 import { createContext, useEffect, useState, ReactNode } from "react";
-import type { User as FirebaseUser } from "firebase/auth";
-import { auth } from "@/lib/firebase/config";
 import { usePathname, useRouter } from "next/navigation";
 import { sampleUsers } from "@/lib/data";
 import type { User } from "@/lib/types";
 
-// For demo purposes, we'll use a mock user.
-// In a real app, you would fetch this from your Firestore 'users' collection.
 const MOCK_USER: User = sampleUsers[0];
 
 const PROTECTED_ROUTES = ["/feed", "/new-post", "/profile", "/trending", "/search"];
@@ -28,26 +24,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    // In a real app, you'd use onAuthStateChanged from Firebase
-    // const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-    //   if (firebaseUser) {
-    //     // Fetch user profile from Firestore and set it
-    //     // For now, we use a mock user
-    //     setUser(MOCK_USER);
-    //   } else {
-    //     setUser(null);
-    //   }
-    //   setLoading(false);
-    // });
-    // return () => unsubscribe();
-
-    // Mock authentication logic
-    setTimeout(() => {
+    // Mock authentication logic. In a real app, this would use Firebase Auth.
+    const timer = setTimeout(() => {
         // To test logged out state, set the initial user to null
         // setUser(null);
         setUser(MOCK_USER); 
         setLoading(false);
     }, 1000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
