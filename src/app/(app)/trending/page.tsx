@@ -9,8 +9,9 @@ export default function TrendingPage() {
   // In a real app, you'd fetch posts from the last 24 hours and sort by likes
   const trendingPosts: Post[] = [...samplePosts]
     .sort((a, b) => b.likes.length - a.likes.length)
-    .map(post => ({
+    .map((post, index) => ({
       ...post,
+      id: `trending-${index}`, // Add a unique ID
       user: sampleUsers.find(u => u.uid === post.uid),
       commentCount: 2 // Mock comment count
     }));
