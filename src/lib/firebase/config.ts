@@ -5,12 +5,13 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBiuEbkpBayaQ4qF_6Wik-TiFVWz4VKHj4",
+  authDomain: "tuneshare-30d1d.firebaseapp.com",
+  projectId: "tuneshare-30d1d",
+  storageBucket: "tuneshare-30d1d.appspot.com",
+  messagingSenderId: "126535824059",
+  appId: "1:126535824059:web:08a35adceb65aad1006f9e",
+  measurementId: "G-MYBKFWGCM9"
 };
 
 // Initialize Firebase
