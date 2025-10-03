@@ -4,7 +4,7 @@ import { summarizeTrendingSongs, TrendingSongsSummaryInput, TrendingSongsSummary
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { samplePosts } from "@/lib/data";
-import { Bot } from "lucide-react";
+import { Bot, AlertTriangle } from "lucide-react";
 
 export default function TrendingSummary() {
   const [summary, setSummary] = useState<TrendingSongsSummaryOutput | null>(null);
@@ -15,6 +15,7 @@ export default function TrendingSummary() {
     async function getSummary() {
       try {
         setLoading(true);
+        setError(null);
         // In a real app, fetch trending songs from Firestore
         const trendingSongsInput: TrendingSongsSummaryInput = {
           songs: samplePosts
@@ -37,9 +38,9 @@ export default function TrendingSummary() {
 
         const result = await summarizeTrendingSongs(trendingSongsInput);
         setSummary(result);
-      } catch (e) {
-        console.error(e);
-        setError("Could not generate trending summary.");
+      } catch (e: any) {
+        console.error("Failed to generate summary:", e);
+        setError("The AI trend analysis is currently unavailable. Please check your API configuration and try again later.");
       } finally {
         setLoading(false);
       }
@@ -64,8 +65,18 @@ export default function TrendingSummary() {
             <Skeleton className="h-4 w-3/4" />
           </div>
         )}
-        {error && <p className="text-destructive">{error}</p>}
-        {summary && <p className="font-body text-base">{summary.summary}</p>}
+        {error && (
+            <div className="flex items-start gap-3 text-destructive">
+                <AlertTriangle className="h-5 w-5 mt-1" />
+                <div className="flex-1">
+                    <p className="font-semibold">Analysis Failed</p>
+                    <p className="text-sm">{error}</p>
+                </div>
+            </div>
+        )}
+        {!loading && !error && summary && (
+            <p className="font-body text-base">{summary.summary}</p>
+        )}
       </CardContent>
     </Card>
   );
