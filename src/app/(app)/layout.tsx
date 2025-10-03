@@ -1,3 +1,4 @@
+'use client';
 import NavBar from "@/components/nav-bar";
 import { useAuth } from "@/hooks/use-auth";
 
