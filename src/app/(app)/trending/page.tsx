@@ -1,4 +1,4 @@
-import TrendingSummary from '@/components/trending/trending-summary';
+'use client';
 import PostCard from '@/components/post-card';
 import { samplePosts, sampleUsers } from '@/lib/data';
 import type { Post } from '@/lib/types';
@@ -22,8 +22,6 @@ export default function TrendingPage() {
         <h1 className="text-4xl font-headline text-foreground">Trending on TuneShare</h1>
       </div>
       
-      <TrendingSummary />
-
       <h2 className="text-2xl font-headline mt-12 mb-6">Top Tracks Right Now</h2>
       <div className="space-y-6">
         {trendingPosts.map((post) => (
